@@ -1,0 +1,20 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build clox",
+            "type": "shell",
+            "command": "cmd",
+            "args": ["/C", "g++ -fdiagnostics-color=always -g *.c -o clox.exe"],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Compiles all .c files using CMD wildcard expansion"
+        }
+    ]
+}
