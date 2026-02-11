@@ -4,17 +4,12 @@
         {
             "label": "Build clox",
             "type": "shell",
-            "command": "cmd",
-            "args": ["/C", "g++ -fdiagnostics-color=always -g *.c -o clox.exe"],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
+            "command": "mingw32-make",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": ["$gcc"],
-            "detail": "Compiles all .c files using CMD wildcard expansion"
+            "problemMatcher": ["$gcc"]
         }
     ]
 }
