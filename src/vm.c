@@ -1,5 +1,6 @@
 #include "vm.h"
 
+#include <math.h>
 #include <stdio.h>
 
 #include "common.h"
@@ -65,6 +66,12 @@ static InterpretResult run() {
             }
             case OP_DIVIDE: {
                 BINARY_OP(/);
+                break;
+            }
+            case OP_MODULO: {
+                double b = pop();
+                double a = pop();
+                push(fmod(a, b));
                 break;
             }
             case OP_NEGATE: {
