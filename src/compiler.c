@@ -170,17 +170,24 @@ static void grouping() {
     consume(TOKEN_RIGHT_PAREN, "Expect ')' after expression.");
 }
 
+// Converts the previous token to a double, then writes it as a number Value to
+// the chunk.
 static void number() {
     double value = strtod(parser.previous.start, NULL);
     emitConstant(NUMBER_VAL(value));
 }
 
+// Calls `parsePrecedence` to handle the operand, then writes the corresponding
+// operator to the chunk.
 static void unary() {
     TokenType operatorType = parser.previous.type;
 
     parsePrecedence(PREC_UNARY);
 
     switch (operatorType) {
+        case TOKEN_BANG:
+            emitByte(OP_NOT);
+            break;
         case TOKEN_MINUS:
             emitByte(OP_NEGATE);
             break;
@@ -201,7 +208,7 @@ ParseRule rules[] = {
     [TOKEN_SEMICOLON] = {NULL, NULL, PREC_NONE},
     [TOKEN_SLASH] = {NULL, binary, PREC_FACTOR},
     [TOKEN_STAR] = {NULL, binary, PREC_FACTOR},
-    [TOKEN_BANG] = {NULL, NULL, PREC_NONE},
+    [TOKEN_BANG] = {unary, NULL, PREC_NONE},
     [TOKEN_BANG_EQUAL] = {NULL, NULL, PREC_NONE},
     [TOKEN_EQUAL] = {NULL, NULL, PREC_NONE},
     [TOKEN_EQUAL_EQUAL] = {NULL, NULL, PREC_NONE},
