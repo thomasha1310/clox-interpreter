@@ -85,10 +85,12 @@ static void consume(TokenType type, const char* message) {
     errorAtCurrent(message);
 }
 
+// Writes a bytecode instruction `byte` to the chunk.
 static void emitByte(uint8_t byte) {
     writeChunk(currentChunk(), byte, parser.previous.line);
 }
 
+// Writes `byte1` and `byte2` to the chunk, in that order.
 static void emitBytes(uint8_t byte1, uint8_t byte2) {
     emitByte(byte1);
     emitByte(byte2);
@@ -131,6 +133,24 @@ static void binary() {
     parsePrecedence((Precedence)(rule->precedence + 1));
 
     switch (operatorType) {
+        case TOKEN_BANG_EQUAL:
+            emitBytes(OP_EQUAL, OP_NOT);
+            break;
+        case TOKEN_EQUAL_EQUAL:
+            emitByte(OP_EQUAL);
+            break;
+        case TOKEN_GREATER:
+            emitByte(OP_GREATER);
+            break;
+        case TOKEN_GREATER_EQUAL:
+            emitBytes(OP_LESS, OP_NOT);
+            break;
+        case TOKEN_LESS:
+            emitByte(OP_LESS);
+            break;
+        case TOKEN_LESS_EQUAL:
+            emitBytes(OP_GREATER, OP_NOT);
+            break;
         case TOKEN_PLUS:
             emitByte(OP_ADD);
             break;
@@ -209,13 +229,13 @@ ParseRule rules[] = {
     [TOKEN_SLASH] = {NULL, binary, PREC_FACTOR},
     [TOKEN_STAR] = {NULL, binary, PREC_FACTOR},
     [TOKEN_BANG] = {unary, NULL, PREC_NONE},
-    [TOKEN_BANG_EQUAL] = {NULL, NULL, PREC_NONE},
+    [TOKEN_BANG_EQUAL] = {NULL, binary, PREC_NONE},
     [TOKEN_EQUAL] = {NULL, NULL, PREC_NONE},
-    [TOKEN_EQUAL_EQUAL] = {NULL, NULL, PREC_NONE},
-    [TOKEN_GREATER] = {NULL, NULL, PREC_NONE},
-    [TOKEN_GREATER_EQUAL] = {NULL, NULL, PREC_NONE},
-    [TOKEN_LESS] = {NULL, NULL, PREC_NONE},
-    [TOKEN_LESS_EQUAL] = {NULL, NULL, PREC_NONE},
+    [TOKEN_EQUAL_EQUAL] = {NULL, binary, PREC_NONE},
+    [TOKEN_GREATER] = {NULL, binary, PREC_NONE},
+    [TOKEN_GREATER_EQUAL] = {NULL, binary, PREC_NONE},
+    [TOKEN_LESS] = {NULL, binary, PREC_NONE},
+    [TOKEN_LESS_EQUAL] = {NULL, binary, PREC_NONE},
     [TOKEN_IDENTIFIER] = {NULL, NULL, PREC_NONE},
     [TOKEN_STRING] = {NULL, NULL, PREC_NONE},
     [TOKEN_NUMBER] = {number, NULL, PREC_NONE},
