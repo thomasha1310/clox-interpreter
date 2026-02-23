@@ -28,6 +28,9 @@ struct ObjString {
     char* chars;
 };
 
+// Creates and returns a pointer to a new `ObjString`, assuming that the
+// function can take ownership of `chars`.
+ObjString* takeString(char* chars, int length);
 // Creates and returns a pointer to a new `ObjString` by copying a character
 // array into newly allocated heap memory.
 ObjString* copyString(const char* chars, int length);

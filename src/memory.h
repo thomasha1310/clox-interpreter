@@ -3,6 +3,7 @@
 
 #include "common.h"
 
+// Allocate a block of memory of size `sizeof(type) * count`.
 #define ALLOCATE(type, count) (type*)reallocate(NULL, 0, sizeof(type) * (count))
 
 #define GROW_CAPACITY(capacity) ((capacity) < 8 ? 8 : (capacity) * 2)
