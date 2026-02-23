@@ -14,7 +14,8 @@
 #define FREE_ARRAY(type, pointer, oldCount) \
     reallocate(pointer, sizeof(type) * (oldCount), 0)
 
-// Reallocates a chunk of memory at `pointer` from `oldSize` to `newSize`.
+// Reallocates a block of memory at `pointer` from `oldSize` to `newSize`. If
+// `pointer` is `NULL`, behaves like `malloc(newSize)`.
 void* reallocate(void* pointer, size_t oldSize, size_t newSize);
 
 #endif
