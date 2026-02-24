@@ -2,9 +2,13 @@
 #define CLOX_MEMORY_H
 
 #include "common.h"
+#include "object.h"
 
 // Allocate a block of memory of size `sizeof(type) * count`.
 #define ALLOCATE(type, count) (type*)reallocate(NULL, 0, sizeof(type) * (count))
+
+// Frees a block of memory of size `sizeof(type)` at `pointer`.
+#define FREE(type, pointer) reallocate(pointer, sizeof(type), 0);
 
 #define GROW_CAPACITY(capacity) ((capacity) < 8 ? 8 : (capacity) * 2)
 
@@ -18,5 +22,7 @@
 // Reallocates a block of memory at `pointer` from `oldSize` to `newSize`. If
 // `pointer` is `NULL`, behaves like `malloc(newSize)`.
 void* reallocate(void* pointer, size_t oldSize, size_t newSize);
+
+void freeObjects();
 
 #endif
