@@ -27,6 +27,7 @@ struct ObjString {
     Obj obj;
     int length;
     char* chars;
+    uint32_t hash;
 };
 
 // Creates and returns a pointer to a new `ObjString`, assuming that the
