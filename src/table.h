@@ -15,7 +15,17 @@ typedef struct {
     Entry* entries;
 } Table;
 
+// Reset `table` to have a count and capacity of 0 with `NULL` entries.
 void initTable(Table* table);
+
+// Frees `table->entries` and calls `initTable`.
 void freeTable(Table* table);
+
+// Sets the specified key-value pair in `table`, creating a new entry if one
+// does not exist.
+bool tableSet(Table* table, ObjString* key, Value value);
+
+// Adds all entries from `from` to `to`.
+void tableAddAll(Table* from, Table* to);
 
 #endif
