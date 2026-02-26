@@ -59,6 +59,16 @@ static void adjustCapacity(Table* table, int capacity) {
     table->capacity = capacity;
 }
 
+bool tableGet(Table* table, ObjString* key, Value* value) {
+    if (table->count == 0) return false;  // Table is empty.
+
+    Entry* entry = findEntry(table->entries, table->capacity, key);
+    if (entry->key == NULL) return false;  // Table does not contain this key.
+
+    *value = entry->value;  // Set the output parameter.
+    return true;
+}
+
 bool tableSet(Table* table, ObjString* key, Value value) {
     // Grow (or allocate) memory for the table.
     if (table->count + 1 > table->capacity * TABLE_MAX_LOAD) {

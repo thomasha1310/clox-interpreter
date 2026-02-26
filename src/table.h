@@ -21,6 +21,10 @@ void initTable(Table* table);
 // Frees `table->entries` and calls `initTable`.
 void freeTable(Table* table);
 
+// Returns whether or not `key` corresponds to a valid entry. If `true` is
+// returned, then `value` points to the resulting value.
+bool tableGet(Table* table, ObjString* key, Value* value);
+
 // Sets the specified key-value pair in `table`, creating a new entry if one
 // does not exist.
 bool tableSet(Table* table, ObjString* key, Value value);
