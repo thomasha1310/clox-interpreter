@@ -29,6 +29,10 @@ bool tableGet(Table* table, ObjString* key, Value* value);
 // does not exist.
 bool tableSet(Table* table, ObjString* key, Value value);
 
+// Removes the specified key-value pair in `table`, replacing it with a
+// tombstone entry.
+bool tableDelete(Table* table, ObjString* key);
+
 // Adds all entries from `from` to `to`.
 void tableAddAll(Table* from, Table* to);
 
