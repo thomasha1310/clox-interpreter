@@ -36,4 +36,7 @@ bool tableDelete(Table* table, ObjString* key);
 // Adds all entries from `from` to `to`.
 void tableAddAll(Table* from, Table* to);
 
+ObjString* tableFindString(Table* table, const char* chars, int length,
+                           uint32_t hash);
+
 #endif
