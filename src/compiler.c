@@ -86,6 +86,17 @@ static void consume(TokenType type, const char* message) {
     errorAtCurrent(message);
 }
 
+// Returns whether the current token has the specified `type`.
+static bool check(TokenType type) { return parser.current.type == type; }
+
+// If the current token has the specified `type`, consumes it and return `true`.
+// Otherwise, return `false`.
+static bool match(TokenType type) {
+    if (!check(type)) return false;
+    advance();
+    return true;
+}
+
 // Writes a bytecode instruction `byte` to the chunk.
 static void emitByte(uint8_t byte) {
     writeChunk(currentChunk(), byte, parser.previous.line);
@@ -123,6 +134,8 @@ static void endCompiler() {
 }
 
 static void expression();
+static void statement();
+static void declaration();
 static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 
@@ -284,6 +297,28 @@ static void parsePrecedence(Precedence precedence) {
 
 static void expression() { parsePrecedence(PREC_ASSIGNMENT); }
 
+static void expressionStatement() {
+    expression();
+    consume(TOKEN_SEMICOLON, "Expect ';' after expression.");
+    emitByte(OP_POP);
+}
+
+static void printStatement() {
+    expression();
+    consume(TOKEN_SEMICOLON, "Expect ';' after value.");
+    emitByte(OP_PRINT);
+}
+
+static void declaration() { statement(); }
+
+static void statement() {
+    if (match(TOKEN_PRINT)) {
+        printStatement();
+    } else {
+        expressionStatement();
+    }
+}
+
 static ParseRule* getRule(TokenType type) { return &rules[type]; }
 
 bool compile(const char* source, Chunk* chunk) {
@@ -294,8 +329,11 @@ bool compile(const char* source, Chunk* chunk) {
     parser.panicMode = false;
 
     advance();
-    expression();
-    consume(TOKEN_EOF, "Expect end of expression.");
+
+    while (!match(TOKEN_EOF)) {
+        declaration();
+    }
+
     endCompiler();
     return !parser.hadError;
 }
