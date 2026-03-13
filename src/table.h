@@ -26,7 +26,7 @@ void freeTable(Table* table);
 bool tableGet(Table* table, ObjString* key, Value* value);
 
 // Sets the specified key-value pair in `table`, creating a new entry if one
-// does not exist.
+// does not exist. Returns `true` if the entry is new and `false` otherwise.
 bool tableSet(Table* table, ObjString* key, Value value);
 
 // Removes the specified key-value pair in `table`, replacing it with a
