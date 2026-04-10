@@ -522,7 +522,7 @@ static void forStatement() {
     consume(TOKEN_LEFT_PAREN, "Expect '(' after 'for'.");
     if (match(TOKEN_SEMICOLON)) {
     } else if (match(TOKEN_VAR)) {
-        varDeclaration;
+        varDeclaration();
     } else {
         expressionStatement();
     }
@@ -550,7 +550,7 @@ static void forStatement() {
         patchJump(bodyJump);
     }
 
-    statement;
+    statement();
 
     // Return to increment if present, or condition otherwise.
     emitLoop(loopStart);
