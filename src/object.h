@@ -41,7 +41,7 @@ struct ObjString {
 };
 
 // Creates a new Lox function.
-ObjString* newFunction();
+ObjFunction* newFunction();
 
 // Creates and returns a pointer to a new `ObjString`, assuming that the
 // function can take ownership of `chars`.
