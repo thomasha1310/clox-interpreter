@@ -20,8 +20,8 @@
 #define AS_CSTRING(value) (AS_STRING(value)->chars)
 
 typedef enum {
-    OBJ_STRING,
     OBJ_FUNCTION,
+    OBJ_STRING,
 } ObjType;
 
 struct Obj {
@@ -43,6 +43,7 @@ struct ObjString {
     uint32_t hash;
 };
 
+// Creates a new Lox function.
 ObjFunction* newFunction();
 // Creates and returns a pointer to a new `ObjString`, assuming that the
 // function can take ownership of `chars`.
