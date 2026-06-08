@@ -149,8 +149,11 @@ static int emitJump(uint8_t instruction) {
     return currentChunk()->count - 2;
 }
 
-// Writes an `OP_RETURN` instruction to the chunk.
-static void emitReturn() { emitByte(OP_RETURN); }
+// Handles an implicit return value of `nil` when a return value is missing.
+static void emitReturn() {
+    emitByte(OP_NIL);
+    emitByte(OP_RETURN);
+}
 
 // Add `value` to the current chunk's constant table and returns its index.
 static uint8_t makeConstant(Value value) {
@@ -665,6 +668,20 @@ static void printStatement() {
     expression();
     consume(TOKEN_SEMICOLON, "Expect ';' after value.");
     emitByte(OP_PRINT);
+}
+
+static void returnStatement() {
+    if (current->type == TYPE_SCRIPT) {
+        error("Can't return from top-level code.");
+    }
+
+    if (match(TOKEN_SEMICOLON)) {
+        emitReturn();
+    } else {
+        expression();
+        consume(TOKEN_SEMICOLON, "Expect ';' after return value.");
+        emitByte(OP_RETURN);
+    }
 }
 
 static void whileStatement() {
